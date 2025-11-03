@@ -1,0 +1,10 @@
+/venv
+__pycache__
+NDS_UNPACK
+*.skytemple/
+
+skypatches/*.skypatch
+
+*.nds
+*.sav
+*.nds.bak

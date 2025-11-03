@@ -1,0 +1,20 @@
+import os
+import sys
+
+from ndspy.rom import NintendoDSRom
+from asm_patch import do_thing
+
+def main(rom_path: str):
+    rom = NintendoDSRom.fromFile(rom_path)
+    do_thing(rom)
+    rom.saveToFile('modified.nds')
+    
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Please provide a ROM path.", file=sys.stderr)
+        exit(1)
+    if not os.path.exists(sys.argv[1]):
+        print(f"ROM {sys.argv[1]} not found.", file=sys.stderr)
+        exit(1)
+    main(sys.argv[1])

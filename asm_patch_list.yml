@@ -1,0 +1,18 @@
+Patches:
+  ExtraSpace:
+  AddKeyCheck:
+  AppraiseAll:
+    MenuOptionStringID: 300
+    AppraiseAllConfirmStringID: 301
+    AppraiseRevealBeforeStringID: 302
+    AppraiseRevealItemStringID: 303
+    ReplaceStrings: '1'
+    BoxCost: 150
+  NoWeatherStop:
+  AntiSoftlock:
+  DisplayScriptVariable:
+  MoveShortcuts:
+  EditGuestPokemon:
+  ExternalizeMappaFile:
+  ExtractHardcodedItemLists:
+  ExtractSPCode:
