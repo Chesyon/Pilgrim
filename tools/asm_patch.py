@@ -5,22 +5,19 @@ from skytemple_files.common.ppmdu_config.data import Pmd2PatchParameterType
 from skytemple_files.patch.errors import PatchNotConfiguredError
 from os import listdir
 from os.path import isfile, join
-import sys
-import yaml
 SKYPATCH_FOLDER = "skypatches"
 
-def do_thing(rom: NintendoDSRom):
+def apply_patches(rom: NintendoDSRom, pilgrim_config):
     # Initialize
     ppmdu_config = get_ppmdu_config_for_rom(rom)
     patcher = Patcher(rom, ppmdu_config)
-    with open('asm_patch_list.yml') as config_file:
-        pilgrim_config = yaml.safe_load(config_file)
     pilgrim_patches = pilgrim_config['Patches']
     patches_to_apply = list(pilgrim_patches.keys())
     print(patches_to_apply)
     # Load skypatches from folder
-    for f in listdir(SKYPATCH_FOLDER):
-        path = join(SKYPATCH_FOLDER, f)
+    skypatch_folder_abs = join(pilgrim_config['Root'], SKYPATCH_FOLDER)
+    for f in listdir(skypatch_folder_abs):
+        path = join(skypatch_folder_abs, f)
         if isfile(path) and f.endswith(".skypatch"):
             print(f"Loading {f}...")
             patcher.add_pkg(path)

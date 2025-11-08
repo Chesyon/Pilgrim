@@ -2,11 +2,12 @@ import os
 import sys
 
 from ndspy.rom import NintendoDSRom
-from asm_patch import do_thing
+from asm_patch import apply_patches
+from config_loader import get_config
 
 def main(rom_path: str):
     rom = NintendoDSRom.fromFile(rom_path)
-    do_thing(rom)
+    apply_patches(rom, get_config())
     rom.saveToFile('modified.nds')
     
 
