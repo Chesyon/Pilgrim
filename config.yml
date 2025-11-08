@@ -1,3 +1,18 @@
+OffsetMaps:
+    '22e7b88': '22e7248' # ProcStartAddress
+    '22e8400': '22e7ac0' # ProcJumpAddress
+    '2003d70': '2003d70' # CardPullOut
+    '22e7bcc': '22e850c'
+    '204b824': '204b4ec' # LoadScriptVariableValue
+    '204bcc0': '204b988' # SaveScriptVariableValueAtIndex
+    '204b9b0': '204b678' # LoadScriptVariableValueAtIndex
+    '22e7bb8': '22e84f8'
+    '22e7ba0': '22e84e0'
+    '22e7c0c': '22e854c'
+    '22e7be8': '22e8528'
+    '22e7bf8': '22e8538'
+    '204bb58': '204b820' # SaveScriptVariableValue
+    '2065fc4': '2065c48' # RandomizeDemoActors
 Patches:
   ExtraSpace:
   AddKeyCheck:
