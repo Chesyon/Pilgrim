@@ -3,10 +3,12 @@ requires = ["flit_core >=3.11,<5"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "pilgrim"
+name = "pmdsky-pilgrim"
+version = "0.0.0"
 authors = [
     {name = "Chesyon"},
 ]
+description = "Tool to port EU ROMhacks of PMD:EoS to the NA release"
 readme = "README.rst"
 requires-python = ">=3.10"
 keywords = ["rom-hacking", "game-modding", "skytemple"]
@@ -16,3 +18,6 @@ dependencies = [
     "ndspy >= 3.0.0",
     "skytemple-files >= 1.8.5",
 ]
+
+[project.scripts]
+pmdsky-pilgrim = "pmdsky_pilgrim.__main__:cli"

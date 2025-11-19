@@ -5,6 +5,7 @@ NDS_UNPACK
 
 skypatches/*.skypatch
 
+*.whl
 *.nds
 *.sav
 *.nds.bak
