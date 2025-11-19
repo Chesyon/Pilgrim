@@ -12,7 +12,7 @@ requires-python = ">=3.10"
 keywords = ["rom-hacking", "game-modding", "skytemple"]
 license = {text = "GPL-3.0-or-later"}
 dependencies = [
-    "capstone >= 4.0.0"
+    "capstone >= 4.0.0",
     "ndspy >= 3.0.0",
     "skytemple-files >= 1.8.5",
 ]
