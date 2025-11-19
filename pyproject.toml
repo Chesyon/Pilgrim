@@ -21,3 +21,10 @@ dependencies = [
 
 [project.scripts]
 pmdsky-pilgrim = "pmdsky_pilgrim.__main__:cli"
+
+[project.urls]
+Repository = "https://github.com/Chesyon/Pilgrim"
+Issues = "https://github.com/Chesyon/Pilgrim/issues"
+
+[tool.ruff]
+line-length = 120
