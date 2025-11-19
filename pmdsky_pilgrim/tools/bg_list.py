@@ -2,7 +2,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.bg_list_dat._model import BgListEntry, BgList
 
-BG_LIST_DAT_FILE = f"MAP_BG/bg_list.dat"
+BG_LIST_DAT_FILE = "MAP_BG/bg_list.dat"
 
 
 class BGToCopy:

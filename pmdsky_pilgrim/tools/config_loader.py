@@ -9,9 +9,9 @@ def get_config():
     config_path = join(pilgrim_root, "config.yml")
     with open(config_path) as config_file:
         config = yaml.safe_load(config_file)
-    if type(config) != dict:
+    if config is not dict:
         raise TypeError(
             "Config was not a dict. This probably means you really screwed up, or Chesyon really screwed up."
         )
-    config["Root"] = pilgrim_root
+    config.update({"Root": pilgrim_root})
     return config

@@ -1,7 +1,6 @@
 from ndspy.rom import NintendoDSRom
 from skytemple_files.patch.patches import Patcher
 from skytemple_files.common.util import get_ppmdu_config_for_rom
-from skytemple_files.common.ppmdu_config.data import Pmd2PatchParameterType
 from skytemple_files.patch.errors import PatchNotConfiguredError
 from os import listdir
 from os.path import isfile, join
