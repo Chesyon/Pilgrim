@@ -6,14 +6,16 @@ from ndspy.rom import NintendoDSRom
 from special_process_converter import SPConverter
 from config_loader import get_config
 
+
 def main(mod_eu_path: str, vanilla_na_path: str):
     mod_eu = NintendoDSRom.fromFile(mod_eu_path)
     vanilla_na = NintendoDSRom.fromFile(vanilla_na_path)
     spc = SPConverter(mod_eu, get_config())
     spc.prepare_all()
-    #spc.log_convertible_offsets()
+    # spc.log_convertible_offsets()
     spc.create_map()
     spc.convert_all(vanilla_na)
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
