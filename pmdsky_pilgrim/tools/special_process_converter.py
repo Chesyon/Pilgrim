@@ -71,7 +71,7 @@ class SP:
         if offset in self.convertible_offsets.keys():
             self.convertible_offsets[offset][1].append(line)
         else:
-            overlay = overlay_of_offset(int(offset,16))
+            overlay = overlay_of_offset(int(offset, 16))
             if overlay != AddressOverlay.UNKNOWN:
                 self.convertible_offsets.update({offset: (overlay, [line])})
 
@@ -149,17 +149,23 @@ class SPConverter:
         else:
             offset_maps = self.config["OffsetMaps"]
             if offset_maps is None:
-                offset_maps = { }
+                offset_maps = {}
             missing_offsets = []
             for eu_offset in self.all_convertible_offsets:
                 if eu_offset not in offset_maps:
                     try:
-                        na_offset = self.offset_mapper.find_na_offset(int(eu_offset, 16))[2:] # This [2:] is just to remove the 0x at the start, because otherwise we have 2 0xs and everything explodes.
+                        na_offset = self.offset_mapper.find_na_offset(
+                            int(eu_offset, 16)
+                        )[
+                            2:
+                        ]  # This [2:] is just to remove the 0x at the start, because otherwise we have 2 0xs and everything explodes.
                         offset_maps.update({eu_offset: na_offset})
                     except UnmappableOffsetException:
                         missing_offsets.append(eu_offset)
             if len(missing_offsets) != 0:  # Abort because some offsets couldn't be found
-                print(f"{len(missing_offsets)} offsets could not be automatically converted! Please find them manually and provide them through config. Missing offsets:")
+                print(
+                    f"{len(missing_offsets)} offsets could not be automatically converted! Please find them manually and provide them through config. Missing offsets:"
+                )
                 for missing_offset in missing_offsets:
                     print(self.convertible_offset_tostr(missing_offset))
                 print("Aborting :(")
