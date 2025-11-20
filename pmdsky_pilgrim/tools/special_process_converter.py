@@ -1,4 +1,4 @@
-from enum import Enum
+from find_offset import OffsetMapper, UnmappableOffsetException, AddressOverlay, overlay_of_offset
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
 from skytemple_files.data.data_cd.model import DataCD
 from ndspy.rom import NintendoDSRom
@@ -10,30 +10,7 @@ PROC_START_ADDRESS_EU = 0x22E7B88
 PROC_START_ADDRESS_EU_STR = hex(PROC_START_ADDRESS_EU)
 PROCESS_BIN_PATH = "BALANCE/process.bin"
 
-ARM9_START = 0x2000000
-ARM9_LEN_EU = 0xB7D38
-OV10_START_EU = 0x22BD3C0
-OV10_LEN_EU = 0x1F7A0
-OV11_START_EU = 0x22DCB80
-OV11_LEN_EU = 0x48E40
-
 FIRST_CUSTOM_SP_ID = 61
-
-SPOverlay = Enum("SPOverlay", ["NOT_CONVERTIBLE", "ARM9", "OVERLAY_10", "OVERLAY_11"])
-
-
-# TODO: perhaps detect branches to other parts of the same SP, add a separate category.
-def get_overlay_of_addr(addr: str) -> SPOverlay:
-    """Get the overlay for an address."""
-    addr_int = int(addr, 16)
-    if 0 <= addr_int - ARM9_START <= ARM9_LEN_EU:
-        return SPOverlay.ARM9
-    elif 0 <= addr_int - OV10_START_EU <= OV10_LEN_EU:
-        return SPOverlay.OVERLAY_10
-    elif 0 <= addr_int - OV11_START_EU <= OV11_LEN_EU:
-        return SPOverlay.OVERLAY_11
-    else:
-        return SPOverlay.NOT_CONVERTIBLE
 
 
 class SP:
@@ -44,7 +21,7 @@ class SP:
         disassembled = capstone.disasm_lite(raw_bytes, PROC_START_ADDRESS_EU)
         # Entry in convertible_offsets: { address: (overlay, [line_nums])}
         self.source = f'.relativeinclude on\n.nds\n.arm\n\n; File creation\n.create "./code_out.bin", {PROC_START_ADDRESS_EU_STR}\n    .org {PROC_START_ADDRESS_EU_STR}\n'
-        self.convertible_offsets = {PROC_START_ADDRESS_EU_STR[2:]: (SPOverlay.OVERLAY_11, [5, 6])}
+        self.convertible_offsets = {PROC_START_ADDRESS_EU_STR[2:]: (AddressOverlay.OVERLAY_11, [5, 6])}
         load_addresses = []
         for instruction in disassembled:
             # instruction[0]: address
@@ -59,6 +36,7 @@ class SP:
             mnemonic = instruction[2]
             mnemonic = mnemonic.replace("ldm", "ldmia")
             op_str = instruction[3]
+            # NOTE: this idea of detecting pool loads probably breaks if the load falls AFTER the address its loading from. might be worth reworking this to just do a second pass over everything.
             if address in load_addresses:
                 # This is a pool address! Convert it to a .word!
                 offset = address - PROC_START_ADDRESS_EU
@@ -93,8 +71,8 @@ class SP:
         if offset in self.convertible_offsets.keys():
             self.convertible_offsets[offset][1].append(line)
         else:
-            overlay = get_overlay_of_addr(offset)
-            if overlay != SPOverlay.NOT_CONVERTIBLE:
+            overlay = overlay_of_offset(int(offset,16))
+            if overlay != AddressOverlay.UNKNOWN:
                 self.convertible_offsets.update({offset: (overlay, [line])})
 
     def apply_offsets(self, offset_maps: dict[str, str]) -> str:
@@ -122,9 +100,9 @@ class SPConverter:
         self.cs = Cs(CS_ARCH_ARM, CS_MODE_ARM)
         self.sps = []
         self.all_convertible_offsets = {}
+        self.offset_mapper = OffsetMapper()
         self.config = config
         self.offset_maps = None
-        # self.xmap_reader = XmapReader(Region.EU, False) # TODO: Add support for using a local XMAP
 
     def prepare_all(self):
         for i in range(FIRST_CUSTOM_SP_ID, len(self.data_cd.effects_code)):
@@ -149,17 +127,16 @@ class SPConverter:
             print(self.convertible_offset_tostr(convertible_offset))
 
     def convertible_offset_tostr(self, convertible_offset: str) -> str:
-        # TODO: merge overlay_name into this function
         overlay = self.all_convertible_offsets[convertible_offset]
         match overlay:
-            case SPOverlay.ARM9:
+            case AddressOverlay.ARM9:
                 overlay_name = "arm9"
-            case SPOverlay.OVERLAY_10:
+            case AddressOverlay.OVERLAY_10:
                 overlay_name = "overlay10"
-            case SPOverlay.OVERLAY_11:
+            case AddressOverlay.OVERLAY_11:
                 overlay_name = "overlay11"
             case _:
-                raise ValueError(f"Invalid overlay {overlay} given to overlay_name")
+                raise ValueError(f"Invalid overlay {overlay} given to convertible_offset_tostr")
         return f"0x{convertible_offset} [EU] in {overlay_name}"
 
     def create_map(self):
@@ -171,13 +148,18 @@ class SPConverter:
             exit(1)
         else:
             offset_maps = self.config["OffsetMaps"]
+            if offset_maps is None:
+                offset_maps = { }
             missing_offsets = []
             for eu_offset in self.all_convertible_offsets:
                 if eu_offset not in offset_maps:
-                    # With decomp tools, this would be a sign to automatically calculate and add to offset_maps.
-                    missing_offsets.append(eu_offset)
-            if len(missing_offsets) != 0:  # Abort because we can't automatically convert yet
-                print(f"{len(missing_offsets)} required offset map(s) were missing from the config! Missing offsets:")
+                    try:
+                        na_offset = self.offset_mapper.find_na_offset(int(eu_offset, 16))[2:] # This [2:] is just to remove the 0x at the start, because otherwise we have 2 0xs and everything explodes.
+                        offset_maps.update({eu_offset: na_offset})
+                    except UnmappableOffsetException:
+                        missing_offsets.append(eu_offset)
+            if len(missing_offsets) != 0:  # Abort because some offsets couldn't be found
+                print(f"{len(missing_offsets)} offsets could not be automatically converted! Please find them manually and provide them through config. Missing offsets:")
                 for missing_offset in missing_offsets:
                     print(self.convertible_offset_tostr(missing_offset))
                 print("Aborting :(")
@@ -199,4 +181,9 @@ class SPConverter:
             print(f"Converting and importing SP {sp.id}")
             while sp.id >= len(out_data_cd.effects_code):
                 out_data_cd.add_effect_code(bytes("TEMP", "ascii"))
-            out_data_cd.import_armips_effect_code(sp.id, sp.apply_offsets(self.offset_maps))
+            applied_offsets = sp.apply_offsets(self.offset_maps)
+            try:
+                out_data_cd.import_armips_effect_code(sp.id, applied_offsets)
+            except Exception as e:
+                print(f"Error encountered! SP source is as follows:\n{applied_offsets}\nOriginal error:\n{e}")
+                exit(1)
