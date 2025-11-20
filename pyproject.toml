@@ -17,6 +17,7 @@ dependencies = [
     "capstone >= 4.0.0",
     "ndspy >= 3.0.0",
     "skytemple-files >= 1.8.5",
+    "PyYAML >= 6.0.0",
 ]
 
 [project.scripts]
