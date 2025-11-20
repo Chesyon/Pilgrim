@@ -2,8 +2,8 @@ import os
 import sys
 
 from ndspy.rom import NintendoDSRom
-from asm_patch import apply_patches
-from config_loader import get_config
+from pmdsky_pilgrim.tools.asm_patch import apply_patches
+from pmdsky_pilgrim.tools.config_loader import get_config
 
 
 def main(rom_path: str):

@@ -2,7 +2,7 @@ import os
 import sys
 
 from ndspy.rom import NintendoDSRom
-from bg_list import create_na_bg_list
+from pmdsky_pilgrim.tools.bg_list import create_na_bg_list
 
 
 def main(vanilla_eu_name: str, vanilla_na_name: str, mod_eu_name: str):
