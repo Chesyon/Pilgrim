@@ -1,8 +1,9 @@
 import logging
+from pilgrim import main as pilgrim_main
 
 
 def main():
-    print("This will do things in the final product!")
+    pilgrim_main()
 
 
 def cli():

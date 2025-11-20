@@ -2,6 +2,7 @@
 __pycache__
 NDS_UNPACK
 *.skytemple/
+test_project
 
 skypatches/*.skypatch
 
