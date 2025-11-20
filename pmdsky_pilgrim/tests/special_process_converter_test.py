@@ -4,7 +4,7 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from pmdsky_pilgrim.tools.special_process_converter import SPConverter
-from pmdsky_pilgrim.tools.config_loader import get_config
+from pmdsky_pilgrim.tools.project_loader import get_config
 
 
 def main(mod_eu_path: str, vanilla_na_path: str):

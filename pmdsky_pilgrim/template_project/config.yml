@@ -1,3 +1,9 @@
+Roms:
+    Ignore hashes: false # If true, Pilgrim will skip verifying that vanilla ROMs are in fact vanilla. While some features may work, Pilgrim is not tested or designed to work using modified ROMs as "vanilla". Here be dragons! 
+    Vanilla EU: 'vanilla-eu.nds' # Path to vanilla EU ROM, relative to project root
+    Vanilla NA: 'vanilla-na.nds' # Path to vanilla NA ROM, relative to project root
+    Mod EU: 'mod-eu.nds' # Path to modified EU ROM, relative to project root    
+    Mod NA: 'mod-na.nds' # Path to modified NA ROM, relative to project root. This file does not need to be provided, as it is the output!
 OffsetMaps:
     #'22e7b88': '22e7248' # ProcStartAddress
     #'2003d70': '2003d70' # CardPullOut

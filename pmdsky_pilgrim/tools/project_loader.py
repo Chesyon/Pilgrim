@@ -2,6 +2,7 @@ from yaml import safe_load
 from os import path, listdir
 from pathlib import Path
 from shutil import copytree
+from ndspy.rom import NintendoDSRom
 
 
 def load_project(project_dir: str) -> dict:
@@ -43,3 +44,16 @@ def init_project_directory(project_directory: str):
         path.join(Path(__file__).parent.parent.resolve(), "template_project"), project_directory, dirs_exist_ok=True
     )
     exit(0)
+
+def get_rom_if_exists(config, key: str) -> NintendoDSRom:
+    if key not in config["Roms"]:
+        print(f"{key} not present in config!")
+        exit(1)
+    rom_path = path.join(config["Root"], config["Roms"][key])
+    try:
+        rom = NintendoDSRom.fromFile(rom_path)
+    except FileNotFoundError:
+        print()
+        print(f"File for {key} could not be found at {rom_path}. Make sure it exists.")
+        exit(1)
+    return rom
