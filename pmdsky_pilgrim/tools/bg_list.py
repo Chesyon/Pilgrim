@@ -1,6 +1,7 @@
 from ndspy.rom import NintendoDSRom
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.bg_list_dat._model import BgListEntry, BgList
+from .colors import BLUE_TEXT, YELLOW_TEXT, CLEAR_TEXT, GREEN_TEXT
 
 BG_LIST_DAT_FILE = "MAP_BG/bg_list.dat"
 
@@ -18,21 +19,27 @@ class BGToCopy:
         return f"Index {self.eu_index}: {str(self.entry)}"
 
 
-def create_na_bg_list(vanilla_eu: NintendoDSRom, mod_eu: NintendoDSRom, vanilla_na: NintendoDSRom) -> bytes:
+def create_na_bg_list(vanilla_eu: NintendoDSRom, mod_eu: NintendoDSRom, vanilla_na: NintendoDSRom):
     """Creates the MAP_BG/bg_list.dat file for mod_na."""
+    print(f"{YELLOW_TEXT}Checking MAP_BG/bg_list.dat...{CLEAR_TEXT}")
     handler = BgListDatHandler()
     bg_list_vanilla_eu = handler.deserialize(vanilla_eu.getFileByName(BG_LIST_DAT_FILE))
     bg_list_mod_eu = handler.deserialize(mod_eu.getFileByName(BG_LIST_DAT_FILE))
     bg_list_vanilla_na = handler.deserialize(vanilla_na.getFileByName(BG_LIST_DAT_FILE))
 
     bgs_to_copy = compare_base_to_mod(bg_list_vanilla_eu, bg_list_mod_eu)
+    if len(bgs_to_copy) <= 0:
+        print(f"{GREEN_TEXT}bg_list.dat is unmodified! Skipping...{CLEAR_TEXT}")
+        return
+    else:
+        print(f"{BLUE_TEXT}bg_list.dat is modified! Porting...{CLEAR_TEXT}")
     find_na_indexes(bgs_to_copy, bg_list_vanilla_eu, bg_list_vanilla_na)
     for bg_to_copy in bgs_to_copy:
         if bg_to_copy.added:
             bg_list_vanilla_na.add_level(bg_to_copy.entry)
         else:
             bg_list_vanilla_na.set_level(bg_to_copy.na_index, bg_to_copy.entry)
-    return handler.serialize(bg_list_vanilla_na)
+    vanilla_na.setFileByName(BG_LIST_DAT_FILE, handler.serialize(bg_list_vanilla_na))
 
 
 def compare_base_to_mod(base: BgList, modified: BgList) -> list[BGToCopy]:

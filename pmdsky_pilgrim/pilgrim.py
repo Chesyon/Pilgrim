@@ -3,10 +3,9 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from tools.project_loader import load_project, get_rom_if_exists
 from tools.hash_validation import verify_vanilla_eu, verify_vanilla_na
 from tools.asm_patch import get_applied_list, apply_patches
-
-RED_TEXT = "\033[31;91m"
-GREEN_TEXT = "\033[31;92m"
-CLEAR_TEXT = "\033[0m"
+from tools.bg_list import create_na_bg_list
+from tools.special_process_converter import SPConverter
+from tools.colors import RED_TEXT, GREEN_TEXT, YELLOW_TEXT, BLUE_TEXT, CLEAR_TEXT, BOLD_TEXT
 
 
 def main() -> None:
@@ -39,14 +38,14 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    print("Loading project...")
+    print(f"{BLUE_TEXT}Loading project...{CLEAR_TEXT}")
     config = load_project(args.project_dir)
     # Validate ROMs:
     if "Roms" not in config:
         print(f"{RED_TEXT}Roms not present in config!{CLEAR_TEXT}")
         exit(1)
     if not config["Roms"]["Ignore hashes"]:
-        print("Verifying ROMs...")
+        print(f"{YELLOW_TEXT}Verifying ROMs...{CLEAR_TEXT}")
         if not verify_vanilla_eu(config):
             print(f"{RED_TEXT}Vanilla EU did not match expected hash. This ROM isn't vanilla.{CLEAR_TEXT}")
             exit(1)
@@ -55,10 +54,10 @@ def main() -> None:
             exit(1)
         print(f"{GREEN_TEXT}ROMs OK!{CLEAR_TEXT}")
     vanilla_eu = get_rom_if_exists(config, "Vanilla EU")
-    vanilla_na = get_rom_if_exists(config, "Vanilla NA")
+    na = get_rom_if_exists(config, "Vanilla NA")
     mod_eu = get_rom_if_exists(config, "Mod EU")
 
-    print("Checking ASM patches...")
+    print(f"{YELLOW_TEXT}Checking ASM patches...{CLEAR_TEXT}")
     applied_ready, issues = get_applied_list(mod_eu, config)
     if len(issues) > 0:
         print(f"{RED_TEXT}{len(issues)} issue(s) were encountered preparing to apply ASM patches.{CLEAR_TEXT}")
@@ -66,10 +65,17 @@ def main() -> None:
             print(f"{RED_TEXT}Issue {i + 1}: {issues[i]}{CLEAR_TEXT}")
         exit(1)
     if len(applied_ready) > 0:
-        print(f"{GREEN_TEXT}ASM patches OK!{CLEAR_TEXT}Applying ASM to NA...")
-        apply_patches(vanilla_na, applied_ready, config)
-        print("Applying ASM to vanilla EU... (this is only to improve difference detection!)")
+        print(f"{GREEN_TEXT}ASM patches OK!{CLEAR_TEXT}\n{BLUE_TEXT}{BOLD_TEXT}Applying ASM to NA...{CLEAR_TEXT}")
+        apply_patches(na, applied_ready, config)
+        print(f"{BLUE_TEXT}{BOLD_TEXT}Applying ASM to vanilla EU...{CLEAR_TEXT} (this is only to improve difference detection!)")
         apply_patches(vanilla_eu, applied_ready, config)
     else:
-        print("No ASM to apply!\033[0m")
+        print(f"No ASM to apply!{CLEAR_TEXT}")
+    create_na_bg_list(vanilla_eu, mod_eu, na) # Port bg_list.dat if needed
+    if "ExtractSPCode" in applied_ready:
+        print(f"{BLUE_TEXT}{BOLD_TEXT}Converting custom SPs...{CLEAR_TEXT}")
+        spc = SPConverter(mod_eu, config)
+        spc.prepare_all()
+        spc.create_map()
+        spc.convert_all(na)
     # TODO: idfk everything??? make the list of what requires conversion

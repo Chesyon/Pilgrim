@@ -4,6 +4,7 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.patch.errors import PatchNotConfiguredError
 from os import listdir
 from os.path import isfile, join
+from .colors import BLUE_TEXT, RED_TEXT, CLEAR_TEXT
 
 SKYPATCH_FOLDER = "skypatches"
 
@@ -15,7 +16,7 @@ def apply_patches(rom: NintendoDSRom, patches_to_apply: list[str], config):
     patch_configs = config["Patches"]["Include"]
     load_all_custom_patches(patcher, config)
     for patch in patches_to_apply:
-        print(f"Applying {patch}...")
+        print(f"{BLUE_TEXT}Applying {patch}...{CLEAR_TEXT}")
         patch_config = None
         if patch in patch_configs:
             patch_config = patch_configs[patch]
@@ -23,7 +24,7 @@ def apply_patches(rom: NintendoDSRom, patches_to_apply: list[str], config):
             patcher.apply(patch, patch_config)
         except PatchNotConfiguredError as e:
             print(
-                f"Config error encountered for parameter {e.config_parameter} while applying {patch}. Error info: {e}\nAborting :("
+                f"{RED_TEXT}Config error encountered for parameter {e.config_parameter} while applying {patch}. Error info: {e}\nAborting :({CLEAR_TEXT}"
             )
             exit(1)
 

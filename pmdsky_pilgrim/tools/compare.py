@@ -24,8 +24,8 @@ def create_lists(base_rom: NintendoDSRom, mod_rom: NintendoDSRom, target_rom: Ni
     return added, modified_base_target_identical, modified_base_target_different, modified_target_missing
 
 
-# Categorizes the contents of lists into 3 categories: members that are present in only the first list, members that are present in only the second list, and members that are present in both lists.
 def categorize_lists(list1: list[any], list2: list[any]):
+    '''Categorizes the contents of lists into 3 categories: members that are present in only the first list, members that are present in only the second list, and members that are present in both lists.'''
     list1_exclusive = []
     list2_exclusive = []
     shared = []
@@ -40,8 +40,8 @@ def categorize_lists(list1: list[any], list2: list[any]):
     return list1_exclusive, list2_exclusive, shared
 
 
-# Categorizes extensions by their presence in two separate file lists. Return matches that of categorize_lists.
 def categorize_filetypes(filelist_1: list[any], filelist_2: list[any]):
+    '''Categorizes extensions by their presence in two separate file lists. Return matches that of categorize_lists.'''
     filelist_1_extensions = extensions_in_list(filelist_1)
     filelist_2_extensions = extensions_in_list(filelist_2)
     always_identical_types, always_different_types, sometimes_different_types = categorize_lists(
@@ -56,8 +56,8 @@ def categorize_filetypes(filelist_1: list[any], filelist_2: list[any]):
     print("Filetypes that are ALWAYS different between ROMs: " + str(always_different_types))
 
 
-# Sort files into two lists, based on if they're identical or different between two ROMs. Expects that all files in the list are present in both ROMs.
 def categorize_shared_files(rom1: NintendoDSRom, rom2: NintendoDSRom, file_list: list[str]):
+    '''Sort files into two lists, based on if they're identical or different between two ROMs. Expects that all files in the list are present in both ROMs.'''
     identical = []
     different = []
     for shared_file in file_list:

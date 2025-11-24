@@ -1,7 +1,8 @@
-from find_offset import OffsetMapper, UnmappableOffsetException, AddressOverlay, overlay_of_offset
+from .find_offset import OffsetMapper, UnmappableOffsetException, AddressOverlay, overlay_of_offset
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
 from skytemple_files.data.data_cd.model import DataCD
 from ndspy.rom import NintendoDSRom
+from .colors import CLEAR_TEXT, BLUE_TEXT, RED_TEXT
 # from offsets.asm_reader import FindTargetAddressStatus, Region, XmapReader, print_addresses
 
 # TODO: All of this code is atrocious, rewrite it eventually. Surely there are better ways to keep track of information relevant to an SP than five billion different dictionaries. Probably use a dataclass...?
@@ -16,7 +17,7 @@ FIRST_CUSTOM_SP_ID = 61
 class SP:
     def __init__(self, raw_bytes: bytes, id: int, capstone: Cs):
         """Disassembles an SP from bytes using Capstone, and finds potential convertible offsets."""
-        print(f"Disassembling SP {id}")
+        print(f"{BLUE_TEXT}Disassembling SP {id}...{CLEAR_TEXT}")
         self.id = id
         disassembled = capstone.disasm_lite(raw_bytes, PROC_START_ADDRESS_EU)
         # Entry in convertible_offsets: { address: (overlay, [line_nums])}
@@ -144,7 +145,7 @@ class SPConverter:
             print("No offsets to convert!")
             return {}
         if "OffsetMaps" not in self.config:
-            print("OffsetMaps was missing from config. Aborting :(")
+            print(f"{RED_TEXT}OffsetMaps was missing from config. Aborting :({CLEAR_TEXT}")
             exit(1)
         else:
             offset_maps = self.config["OffsetMaps"]
@@ -184,12 +185,12 @@ class SPConverter:
             )
         out_data_cd = DataCD(process_bin)
         for sp in self.sps:
-            print(f"Converting and importing SP {sp.id}")
+            print(f"{BLUE_TEXT}Converting and importing SP {sp.id}...{CLEAR_TEXT}")
             while sp.id >= len(out_data_cd.effects_code):
                 out_data_cd.add_effect_code(bytes("TEMP", "ascii"))
             applied_offsets = sp.apply_offsets(self.offset_maps)
             try:
                 out_data_cd.import_armips_effect_code(sp.id, applied_offsets)
             except Exception as e:
-                print(f"Error encountered! SP source is as follows:\n{applied_offsets}\nOriginal error:\n{e}")
+                print(f"{RED_TEXT}Error encountered! SP source is as follows:\n{applied_offsets}\nOriginal error:\n{e}{CLEAR_TEXT}")
                 exit(1)
