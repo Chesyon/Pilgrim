@@ -45,6 +45,7 @@ def init_project_directory(project_directory: str):
     )
     exit(0)
 
+
 def get_rom_if_exists(config, key: str) -> NintendoDSRom:
     if key not in config["Roms"]:
         print(f"{key} not present in config!")
@@ -54,6 +55,6 @@ def get_rom_if_exists(config, key: str) -> NintendoDSRom:
         rom = NintendoDSRom.fromFile(rom_path)
     except FileNotFoundError:
         print()
-        print(f"File for {key} could not be found at {rom_path}. Make sure it exists.")
+        print(f"ROM for {key} could not be found at {rom_path}. Make sure it exists.")
         exit(1)
     return rom

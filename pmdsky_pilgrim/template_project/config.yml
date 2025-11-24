@@ -21,20 +21,22 @@ OffsetMaps:
     #'204bb58': '204b820' # SaveScriptVariableValue
     #'2065fc4': '2065c48' # RandomizeDemoActors
 Patches:
-  ExtraSpace:
-  AddKeyCheck:
-  AppraiseAll:
-    MenuOptionStringID: 300
-    AppraiseAllConfirmStringID: 301
-    AppraiseRevealBeforeStringID: 302
-    AppraiseRevealItemStringID: 303
-    ReplaceStrings: '1'
-    BoxCost: 150
-  NoWeatherStop:
-  AntiSoftlock:
-  DisplayScriptVariable:
-  MoveShortcuts:
-  EditGuestPokemon:
-  ExternalizeMappaFile:
-  ExtractHardcodedItemLists:
-  ExtractSPCode:
+  Include:
+    ExtraSpace:
+    AddKeyCheck:
+    AppraiseAll:
+      MenuOptionStringID: 300
+      AppraiseAllConfirmStringID: 301
+      AppraiseRevealBeforeStringID: 302
+      AppraiseRevealItemStringID: 303
+      ReplaceStrings: '1'
+      BoxCost: 150
+    NoWeatherStop:
+    AntiSoftlock:
+    DisplayScriptVariable:
+    MoveShortcuts:
+    EditGuestPokemon:
+    ExternalizeMappaFile:
+    ExtractHardcodedItemLists:
+    ExtractSPCode:
+  Exclude: # Any patches listed here will be ignored by Pilgrim. Hopefully unnecessary, but useful if Pilgrim detects something as applied that isn't actually applied.
