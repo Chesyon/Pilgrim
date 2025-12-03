@@ -12,7 +12,8 @@ description = "Tool to port EU ROMhacks of PMD:EoS to the NA release"
 readme = "README.rst"
 requires-python = ">=3.10"
 keywords = ["rom-hacking", "game-modding", "skytemple"]
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE_GPLv3"]
 dependencies = [
     "capstone >= 4.0.0",
     "ndspy >= 3.0.0",

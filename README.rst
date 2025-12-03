@@ -32,3 +32,7 @@ While somewhat more legal than pirating a ROM outright, conversion patches still
 How does Pilgrim address this issue?
 ************************************
 Pilgrim aims to provide a more legally sound alternative to conversion patches. Using a vanilla EU ROM, a vanilla NA ROM, and a modified EU ROM, it creates a ROM based on vanilla NA that has all the changes that were made in the hack. In simpler terms, it 'ports' a ROMhack to the NA release. This allows a patch to be made for the hack with an NA base that *doesn't* distribute any copyrighted assets.
+
+License
+"""""""
+Pilgrim is licensed under `GPLv3 <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3>`_, because it has GPLv3 dependencies (`skytemple-files <https://github.com/SkyTemple/skytemple-files>`_ and `ndspy <https://github.com/RoadrunnerWMC/ndspy>`_). Its **source code**, however, is licensed under `MIT <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT>`_. Refer to `<https://chesyon.me/eos-licenses.html>`
