@@ -35,4 +35,4 @@ Pilgrim aims to provide a more legally sound alternative to conversion patches. 
 
 License
 """""""
-Pilgrim is licensed under `GPLv3 <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3>`_, because it has GPLv3 dependencies (`skytemple-files <https://github.com/SkyTemple/skytemple-files>`_ and `ndspy <https://github.com/RoadrunnerWMC/ndspy>`_). Its **source code**, however, is licensed under `MIT <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT>`_. Refer to `<https://chesyon.me/eos-licenses.html>`
+Pilgrim is licensed under `GPLv3 <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3>`_, because it has GPLv3 dependencies (`skytemple-files <https://github.com/SkyTemple/skytemple-files>`_ and `ndspy <https://github.com/RoadrunnerWMC/ndspy>`_). Its **source code**, however, is licensed under `MIT <https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT>`_. Refer to https://chesyon.me/eos-licenses.html for info on what this means.
