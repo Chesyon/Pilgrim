@@ -1,8 +1,8 @@
- #  Copyright 2025 Chesyon
- #
- #  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
- #  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
- #  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
+#  Copyright 2025 Chesyon
+#
+#  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
+#  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
+#  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
 
 from .find_offset import OffsetMapper, UnmappableOffsetException, AddressOverlay, overlay_of_offset
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
@@ -198,5 +198,7 @@ class SPConverter:
             try:
                 out_data_cd.import_armips_effect_code(sp.id, applied_offsets)
             except Exception as e:
-                print(f"{RED_TEXT}Error encountered! SP source is as follows:\n{applied_offsets}\nOriginal error:\n{e}{CLEAR_TEXT}")
+                print(
+                    f"{RED_TEXT}Error encountered! SP source is as follows:\n{applied_offsets}\nOriginal error:\n{e}{CLEAR_TEXT}"
+                )
                 exit(1)

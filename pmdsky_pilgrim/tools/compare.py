@@ -1,8 +1,8 @@
- #  Copyright 2025 Chesyon
- #
- #  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
- #  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
- #  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
+#  Copyright 2025 Chesyon
+#
+#  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
+#  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
+#  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
 
 from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_files_from_rom_with_extension
@@ -31,7 +31,7 @@ def create_lists(base_rom: NintendoDSRom, mod_rom: NintendoDSRom, target_rom: Ni
 
 
 def categorize_lists(list1: list[any], list2: list[any]):
-    '''Categorizes the contents of lists into 3 categories: members that are present in only the first list, members that are present in only the second list, and members that are present in both lists.'''
+    """Categorizes the contents of lists into 3 categories: members that are present in only the first list, members that are present in only the second list, and members that are present in both lists."""
     list1_exclusive = []
     list2_exclusive = []
     shared = []
@@ -47,7 +47,7 @@ def categorize_lists(list1: list[any], list2: list[any]):
 
 
 def categorize_filetypes(filelist_1: list[any], filelist_2: list[any]):
-    '''Categorizes extensions by their presence in two separate file lists. Return matches that of categorize_lists.'''
+    """Categorizes extensions by their presence in two separate file lists. Return matches that of categorize_lists."""
     filelist_1_extensions = extensions_in_list(filelist_1)
     filelist_2_extensions = extensions_in_list(filelist_2)
     always_identical_types, always_different_types, sometimes_different_types = categorize_lists(
@@ -63,7 +63,7 @@ def categorize_filetypes(filelist_1: list[any], filelist_2: list[any]):
 
 
 def categorize_shared_files(rom1: NintendoDSRom, rom2: NintendoDSRom, file_list: list[str]):
-    '''Sort files into two lists, based on if they're identical or different between two ROMs. Expects that all files in the list are present in both ROMs.'''
+    """Sort files into two lists, based on if they're identical or different between two ROMs. Expects that all files in the list are present in both ROMs."""
     identical = []
     different = []
     for shared_file in file_list:

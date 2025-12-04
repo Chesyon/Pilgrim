@@ -1,8 +1,8 @@
- #  Copyright 2025 Chesyon
- #
- #  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
- #  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
- #  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
+#  Copyright 2025 Chesyon
+#
+#  This source code is licensed under the MIT license: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_MIT
+#  However, the distribution is licensed under GPLv3: https://github.com/Chesyon/Pilgrim/blob/main/LICENSE_GPLv3
+#  For a non-legalese version of what this means, see https://chesyon.me/eos-licenses.html.
 
 from sys import argv
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -73,11 +73,13 @@ def main() -> None:
     if len(applied_ready) > 0:
         print(f"{GREEN_TEXT}ASM patches OK!{CLEAR_TEXT}\n{BLUE_TEXT}{BOLD_TEXT}Applying ASM to NA...{CLEAR_TEXT}")
         apply_patches(na, applied_ready, config)
-        print(f"{BLUE_TEXT}{BOLD_TEXT}Applying ASM to vanilla EU...{CLEAR_TEXT} (this is only to improve difference detection!)")
+        print(
+            f"{BLUE_TEXT}{BOLD_TEXT}Applying ASM to vanilla EU...{CLEAR_TEXT} (this is only to improve difference detection!)"
+        )
         apply_patches(vanilla_eu, applied_ready, config)
     else:
         print(f"No ASM to apply!{CLEAR_TEXT}")
-    create_na_bg_list(vanilla_eu, mod_eu, na) # Port bg_list.dat if needed
+    create_na_bg_list(vanilla_eu, mod_eu, na)  # Port bg_list.dat if needed
     if "ExtractSPCode" in applied_ready:
         print(f"{BLUE_TEXT}{BOLD_TEXT}Converting custom SPs...{CLEAR_TEXT}")
         spc = SPConverter(mod_eu, config)
